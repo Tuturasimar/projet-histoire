@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partie Admin{% endblock %}
+
+{% block body %}
+
+<div class="bigBox">
+    <div class="columnBox">
+        <h1>Bonjour {{app.user.pseudo|capitalize}}</h1>
+        <div class="boxText">
+            <p>Cette page permet d'accéder aux différentes catégories à administrer : utilisateurs, scènes, choix,
+                objets.</p>
+            <p>Par soucis de <span class="redText">sécurité</span> , il ne sera possible aux administrateurs de modifier
+                que certains éléments. Il leur sera <span class="redText">interdit</span> de modifier les labels des
+                chapitres et des choix afin de ne pas détruire la construction de l'histoire par l'auteur.</p>
+            <p>Un administrateur pourra gérer les utilisateurs (édition, suppression)</p>
+            <p>Un administrateur pourra gérer le contenu des scènes et des choix en respectant <span
+                    class="redText">précisément</span> la bonne nomenclature.</p>
+            <p>L'utilité de l'édition dans cette partie du BackOffice est de <span class="blueText">gérer les
+                    éventuelles coquilles dans les textes</span> , <span class="redText">pas de réécrire ou de changer
+                    drastiquement l'histoire.</span> </p>
+        </div>
+    </div>
+    <div class="contentBox">
+        {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <h2>Partie administrateur</h2>
+        <a href="{{path('admin_users')}}">
+            <h3 class="adminBox shadows mixGradient">
+                Gestion Utilisateurs
+            </h3>
+        </a>
+        <a href="{{path('admin_scenes')}}">
+            <h3 class="adminBox shadows mixGradient">
+                Gestion des Scènes
+            </h3>
+        </a>
+        <a href="{{path('admin_choices')}}">
+            <h3 class="adminBox shadows mixGradient">
+                Gestion des Choix
+            </h3>
+        </a>
+        <a href="{{path('admin_items')}}">
+            <h3 class="adminBox shadows mixGradient">
+                Gestion des Objets
+            </h3>
+        </a>
+    </div>
+</div>
+{% endblock %}

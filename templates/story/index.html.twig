@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <h1>Bonjour {{app.user.pseudo|capitalize}}</h1>
+        <div class="boxText">
+            <p>Cette page de profil recense tous les personnages que vous avez créés.</p>
+            <p>Le code couleur indique le cheminement global de votre personnage.</p>
+            <p>Une <span class="redText">couleur rouge</span> indique que vous avez préféré des choix néfastes pour les
+                autres
+                protagonistes, égoïstes ou bien purement cruels.</p>
+            <p>Une <span class="blueText">couleur bleue</span> indique que vous avez préféré des choix qui affectent
+                positivement les
+                autres protagonistes même parfois en sacrifiant un bénéfice personnel.</p>
+            <p>Un <span class="mixColorText">mélange de couleurs</span> indique que votre personnage est empli de
+                nuances et qu'il est
+                difficile à cerner.</p>
+        </div>
+    </div>
+    <div class="contentBox">
+        {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <h2>Limite de personnages : {{ data.characters|length }} / 6 </h2>
+        {% for character in data.characters %}
+        <div class="flexBar">
+            <a href="{{path('app_chapters', {id: character.id })}}" class="linkChapter">
+                <div class="chapterBar shadows {% if character.alignment < -50 %}
+            redGradient
+        {% elseif character.alignment > 50 %}
+            blueGradient
+        {% else %}
+        mixGradient
+        {% endif %}">
+
+                    <img src="{{ asset('images/' ~ character.pj.name|lower  ~ '.jpg') }}" alt="" class="img-fluid">
+                    <div class="titleBox">
+                        <h2 class="">
+                            {{ data.titles[ loop.index0 ] }}
+                        </h2>
+                    </div>
+                </div>
+            </a>
+            <a href="{{path('app_delete_character', {id: character.id})}}" class="redText"><i class="fa fa-eraser"></i>
+            </a>
+        </div>
+
+        {% endfor %}
+        {% if creation %}
+        <a href="{{path('app_new_character')}}">
+            <div class="chapterBar mixGradient shadows">
+                <h2 class="titleBoxNew">Nouveau personnage</h2>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

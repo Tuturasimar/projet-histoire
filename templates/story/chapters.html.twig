@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chapitres{% endblock %}
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <img src="{{ asset('images/' ~ character.archetype.name|lower  ~ '.jpg') }}" alt="" class="img-fluid">
+        <h1>{{character.pj.name}}</h1>
+        <div class="boxText">
+            <p>{{character.pj.background}}</p>
+        </div>
+
+    </div>
+    <div class="contentBox">
+        {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        {% for chapter in chapters %}
+        <a href="{{path('app_read_chapters', {id: character.id, chapter: chapter[0].id })}}">
+            <h2 class="storyBox shadows mixGradient">
+                {{ chapter[0].title }}
+            </h2>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

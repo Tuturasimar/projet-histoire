@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}BACKOFFICE | Objets{% endblock %}
+
+{% block body %}
+<div class="adminContentBox">
+
+    {% for classes,messages in app.flashes %}
+    <div class="text-center alert alert-{{ classes }}">
+        {% for message in messages %}
+        {{ message }} <br>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <h1>Gestion des objets</h1>
+
+    <table class="table table-dark table-bordered text-center">
+        <thead>
+            <tr>
+                {% for colonne in colonnes %}
+                <th>{{ colonne|capitalize }}</th>
+                {% endfor %}
+                <th>Editer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="align-middle">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td class="btnAdmin"><a href="{{path('admin_item_edit', {id: item.id})}}"
+                        class="profilCercle blueGradient shadows"><i class="fas fa-edit"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

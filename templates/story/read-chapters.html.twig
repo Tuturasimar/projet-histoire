@@ -1,0 +1,84 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Chapitre{% endblock %}
+
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <h1>Histoire</h1>
+        <div class="boxText">
+            <p>Plusieurs paragraphes qui vont résumer chaque chapitre ou alors les choix réalisés ?</p>
+        </div>
+    </div>
+    <div class="contentBox">
+        {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <h2 class="qwigleyTitle">{{ content[0][0].chapter.title }}</h2>
+        {% for item in content %}
+        {% if '-CH-' in item[0].label %}
+        {% set effects = item[0].effect|split(';;') %}
+
+        {% for items in effects %}
+        {% set effect = items|split('::') %}
+        {% if (effect[0] == "") or (effect[0] == 'alignment') %}
+        <button class="button noHoverShadow noCursor 
+    {% if effect[0] == 'alignment' %}
+        {% if effect[1] < 0 %}
+       redGradient
+        {% elseif effect[1] > 0 %}
+       blueGradient
+        {% else %}
+        mixGradient
+        {% endif %}
+    {% else %}
+    mixGradient
+    {% endif %}">
+            {{ item[0].content }} 
+            </button>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <div class="textBox">
+            {% set texts = item[0].content|split('::') %}
+            {% for text in texts %}
+            {% if text|first == '"'  %}
+            <span class="qwigleyP">{{text|nl2br}}</span>
+            {% elseif text|first == "@" %}
+            <span class="blueText italic">{{text[1:]|nl2br}}</span>
+            {% elseif text|first == "&" %}
+            <span class="redText italic">{{text[1:]|nl2br}}</span>
+            {% else %}
+            <span>{{text|nl2br}}</span>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="buttonBox">
+            {% if isClosed %}
+            <a href="{{path('app_read_chapters', { id: character.id, chapter: nextChapter.id })}}"
+                class="button shadows mixGradient">Chapitre suivant</a>
+            {% else %}
+            {% if choices is empty %}
+            <a href="{{path('app_endChapter', {character: character.id})}}" class="button shadows mixGradient">Fin du
+                chapitre</a>
+            {% else %}
+            {% for choice in choices %}
+            <a href="{{path('app_choices', {id: choice.id, character: character.id})}}"
+                class="button shadows mixGradient"> {{ choice.content }}
+            </a>
+            {% endfor %}
+            {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

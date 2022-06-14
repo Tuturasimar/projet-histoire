@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau personnage{% endblock %}
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <h1>Création de personnage</h1>
+        <div class="boxText">
+            <p>Chaque personnage dispose déjà d'une histoire personnelle à laquelle il a déjà pu être confronté.</p>
+            <p>Chacun disposant d'une origine différente, l'histoire pourrait différer en fonction de celui choisi.</p>
+            <p>Il ne vous reste plus qu'à compléter leur histoire</p>
+            <p>Pour cela, vous pouvez d'abord choisir un archétype de personnage parmi les classes suivantes : guerrier,
+                mage et roublard.</p>
+        </div>
+    </div>
+    <div class="contentBox">
+        {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <h2>Sélection de l'archétype</h2>
+        {{ form_start(formCharacter)}}
+        <div class="characterBox">
+            {% for archetype in archetypes %}
+            <div class="characterCard">
+                <img src="{{ asset('images/' ~ archetype.name|lower  ~ '.jpg') }}" alt="" class="img-fluid">
+                <h3>{{ archetype.name }}</h3>
+                <p>{{ archetype.description }}</p>
+            </div>
+
+
+            {% endfor %}
+        </div>
+
+        {{ form_widget(formCharacter.archetype, {
+            attr: {
+                class: "my-2"
+            }
+        })}}
+        <h2>Sélection de l'histoire</h2>
+        <div class="characterBox">
+            {% for histoire in histoires %}
+            <div class="characterCard">
+                <img src="{{ asset('images/' ~ histoire.name|lower  ~ '.jpg') }}" alt="" class="img-fluid">
+                <h3>{{ histoire.name }}</h3>
+                <p>{{ histoire.background }}</p>
+            </div>
+
+
+            {% endfor %}
+        </div>
+
+        {{ form_widget(formCharacter.pj, {
+            attr: {
+                class: "my-2"
+            }
+        })}}
+        <button type="submit" class="button shadows mixGradient">Créer</button>
+        {{ form_end(formCharacter)}}
+    </div>
+</div>
+{% endblock %}

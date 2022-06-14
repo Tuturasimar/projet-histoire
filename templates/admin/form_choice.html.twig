@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Admin Form Choix{% endblock %}
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <h1 class="redText">Consignes</h1>
+        <div class="boxText">
+            <p>Il est strictement <span class="redText">interdit</span> de supprimer ou de changer le sens du choix.</p>
+            <p>Le rôle de l'administrateur sera de gérer les potentielles erreurs d'écritures sans passer par la base de données, et uniquement cela.</p>
+        </div>
+    </div>
+    <div class="contentBox">
+        <div class="loginForm">
+
+            <h1 class="text-center">Modification d'un choix</h1>
+
+            {{form_start(formChoice)}}
+            <div class="formBox">
+
+                {{ form_row(formChoice.label)}}
+                {{ form_row(formChoice.content, {
+                    label : "Contenu"
+                }) }}
+
+                <button type="submit" class="mixGradient shadows">Modifier</button>
+
+            </div>
+        </div>
+        {{form_end(formChoice)}}
+    </div>
+</div>
+</div>
+{% endblock %}

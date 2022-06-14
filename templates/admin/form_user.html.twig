@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Admin Form Utilisateur{% endblock %}
+
+{% block body %}
+
+{% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+<div class="loginForm">
+
+    <h1 class="text-center">Modification d'un utilisateur</h1>
+
+    {{form_start(formUser)}}
+    <div class="formBox">
+
+        {{ form_row(formUser.email, {
+        attr: {
+                class: "borderColor"
+            }
+    }) }}
+
+        {{ form_row(formUser.pseudo, {
+        attr: {
+                class: "borderColor"
+            }
+    }) }}
+        {{ form_row(formUser.roles) }}
+
+        <button type="submit" class="mixGradient shadows">Modifier</button>
+
+    </div>
+</div>
+{{form_end(formUser)}}
+</div>
+{% endblock %}

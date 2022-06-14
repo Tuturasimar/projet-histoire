@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %}
+
+{% block title %}BACKOFFICE | Scènes{% endblock %}
+
+{% block body %}
+<div class="adminContentBox">
+
+    {% for classes,messages in app.flashes %}
+    <div class="text-center alert alert-{{ classes }}">
+        {% for message in messages %}
+        {{ message }} <br>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <h1>Gestion des scènes</h1>
+
+    {{form_start(rechercheForm)}}
+
+    {{form_row(rechercheForm.recherche , {
+    label: "Recherchez par le label de la scène",
+    
+})}}
+
+    {{form_end(rechercheForm)}}
+    <table class="table table-dark table-bordered text-center">
+        <thead>
+            <tr>
+                {% for colonne in colonnes %}
+                {% if colonne != 'id' and colonne != 'chapter_id' %}
+                {% if colonne == 'content' %}
+                <th>Contenu</th>
+                {% else %}
+                <th>{{ colonne|capitalize }}</th>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                <th>Editer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for scene in scenes %}
+            <tr class="align-middle">
+                <td>{{scene.content[:50]}}...</td>
+                <td>{{scene.label}}</td>
+                <td class="btnAdmin"><a href="{{path('admin_scene_edit', {id: scene.id})}}"
+                        class="profilCercle blueGradient shadows"><i class="fas fa-edit"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

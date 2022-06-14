@@ -1,0 +1,48 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Admin Form Scenes{% endblock %}
+
+{% block body %}
+<div class="bigBox">
+    <div class="columnBox">
+        <h1 class="redText">Consignes</h1>
+        <div class="boxText">
+            <p>Il est strictement <span class="redText">interdit</span> de supprimer des pans entiers de texte.</p>
+            <p>Chaque contenu d'une scène est composé de plusieurs blocs distincts : les textes adressés au lecteur, les
+                textes liés au récit et les dialogues. Chaque changement de bloc doit se faire par des '<span
+                    class="redText">::</span>'.
+                Ce marqueur devra se mettre automatiquement devant les " " qui annoncent un dialogue.</p>
+            <p>Les textes adressés au joueur commencent soit par :
+                <ul>
+                    <li>@, ce qui illustre un message d'<span class="blueText">alignement bon</span></li>
+                    <li>& qui illustre un message d'<span class="redText">alignement mauvais</span></li>
+                </ul>
+            </p>
+            <p>Le rôle de l'administrateur sera de gérer les potentielles erreurs d'écritures sans passer par la base de données, et uniquement cela.</p>
+        </div>
+    </div>
+    <div class="contentBox">
+        <div class="loginForm">
+
+            <h1 class="text-center">Modification d'une scène</h1>
+
+            {{form_start(formScene)}}
+            <div class="formBox">
+
+                {{ form_row(formScene.label)}}
+                {{ form_row(formScene.content, {
+                    label : "Contenu",
+                    attr : {
+                        class: "textAreaBox"
+                    }
+                }) }}
+
+                <button type="submit" class="mixGradient shadows">Modifier</button>
+
+            </div>
+        </div>
+        {{form_end(formScene)}}
+    </div>
+</div>
+</div>
+{% endblock %}
