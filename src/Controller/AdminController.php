@@ -15,6 +15,7 @@ use App\Repository\ChoiceRepository;
 use App\Repository\ItemRepository;
 use App\Repository\SceneRepository;
 use App\Repository\UserRepository;
+use App\Service\User\UserAdminService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,53 +27,81 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="app_admin")
      */
-    public function index(): Response
+    public function index(UserAdminService $admin): Response
     {
-        return $this->render('admin/index.html.twig');
+        if($admin->isAdmin($this->getUser()))
+        {
+            return $this->render('admin/index.html.twig');
+        }
+        else
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+        
     }
 
     /**
      * @Route("/admin/users", name="admin_users")
      */
 
-    public function adminUsers(UserRepository $userRepo, EntityManagerInterface $manager){
-        $colonnes = $manager->getClassMetadata(User::class)->getFieldNames();
-        $users = $userRepo->findAll();
+    public function adminUsers(UserRepository $userRepo, EntityManagerInterface $manager, UserAdminService $admin){
 
-        return $this->render("admin/admin-users.html.twig", [
-            'colonnes' => $colonnes,
-            'users' => $users
-        ]);
+        if($admin->isAdmin($this->getUser()))
+        {
+            $colonnes = $manager->getClassMetadata(User::class)->getFieldNames();
+            $users = $userRepo->findAll();
+    
+            return $this->render("admin/admin-users.html.twig", [
+                'colonnes' => $colonnes,
+                'users' => $users
+            ]);
+        }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+
+        
     }
 
     /**
      * @Route("admin/user/edit/{id}", name="admin_user_edit")
      */
 
-    public function formUser(EntityManagerInterface $manager, User $user = null, Request $request)
+    public function formUser(EntityManagerInterface $manager, User $user = null, Request $request, UserAdminService $admin)
     {
-        if(!$user)
+        if($admin->isAdmin($this->getUser()))
         {
-            $this->addFlash('danger','Cet utilisateur est inexistant.');
-            return $this->redirectToRoute('admin_users');
-        } 
+            if(!$user)
+            {
+                $this->addFlash('danger','Cet utilisateur est inexistant.');
+                return $this->redirectToRoute('admin_users');
+            } 
+            else 
+            {
+                $form = $this->createForm(AdminUsersType::class, $user);
+                $form->handleRequest($request);
+    
+                if($form->isSubmitted() && $form->isValid()){
+                    $manager->persist($user);
+                    $manager->flush();
+    
+                    $this->addFlash('success','Utilisateur modifié avec succès');
+    
+                    return $this->redirectToRoute('admin_users');
+                }
+    
+                return $this->render("admin/form_user.html.twig", [
+                    'formUser' => $form->createView()
+                ]);
+            }
+        }
         else 
         {
-            $form = $this->createForm(AdminUsersType::class, $user);
-            $form->handleRequest($request);
-
-            if($form->isSubmitted() && $form->isValid()){
-                $manager->persist($user);
-                $manager->flush();
-
-                $this->addFlash('success','Utilisateur modifié avec succès');
-
-                return $this->redirectToRoute('admin_users');
-            }
-
-            return $this->render("admin/form_user.html.twig", [
-                'formUser' => $form->createView()
-            ]);
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
         }
     }
 
@@ -80,9 +109,11 @@ class AdminController extends AbstractController
      * @Route("/admin/user/delete/{id}", name="admin_user_delete")
      */
 
-    public function adminUserDelete(User $user = null, EntityManagerInterface $manager)
+    public function adminUserDelete(User $user = null, EntityManagerInterface $manager, UserAdminService $admin)
     {
-        if(!$user)
+        if($admin->isAdmin($this->getUser()))
+        {
+            if(!$user)
         {
             $this->addFlash('danger',"Cet utiliseur n'existe pas.");
             return $this->redirectToRoute('admin_users');
@@ -94,175 +125,238 @@ class AdminController extends AbstractController
             $this->addFlash('success',"L'utilisateur $pseudo a bien été supprimé.");
             return $this->redirectToRoute('admin_users');
         }
+        
+        }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+        
     }
 
     /**
      * @Route("/admin/scenes", name="admin_scenes")
      */
 
-    public function adminScenes(SceneRepository $sceneRepo, EntityManagerInterface $manager, Request $request){
+    public function adminScenes(SceneRepository $sceneRepo, EntityManagerInterface $manager, Request $request, UserAdminService $admin){
 
-        $form = $this->createForm(RechercheType::class);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
+        if($admin->isAdmin($this->getUser()))
         {
-            $saisie = $form->get('recherche')->getData();
-            $scenes = $sceneRepo->getLikeSceneByLabel($saisie);
-
-            if(!$scenes)
+            $form = $this->createForm(RechercheType::class);
+            $form->handleRequest($request);
+    
+            if($form->isSubmitted() && $form->isValid())
             {
-                $this->addFlash('danger',"Aucune scène disponible avec ce filtre.");
-                return $this->redirectToRoute('admin_scenes');
+                $saisie = $form->get('recherche')->getData();
+                $scenes = $sceneRepo->getLikeSceneByLabel($saisie);
+    
+                if(!$scenes)
+                {
+                    $this->addFlash('danger',"Aucune scène disponible avec ce filtre.");
+                    return $this->redirectToRoute('admin_scenes');
+                }
             }
+            else 
+            {
+                $scenes = $sceneRepo->findAll();
+            }
+    
+            $colonnes = $manager->getClassMetadata(Scene::class)->getFieldNames();
+    
+            return $this->render("admin/admin-scenes.html.twig", [
+                'colonnes' => $colonnes,
+                'scenes' => $scenes,
+                'rechercheForm' => $form->createView()
+            ]);
         }
         else 
         {
-            $scenes = $sceneRepo->findAll();
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
         }
-
-        $colonnes = $manager->getClassMetadata(Scene::class)->getFieldNames();
-
-        return $this->render("admin/admin-scenes.html.twig", [
-            'colonnes' => $colonnes,
-            'scenes' => $scenes,
-            'rechercheForm' => $form->createView()
-        ]);
     }
 
     /**
      * @Route("/admin/scene/edit/{id}", name="admin_scene_edit")
      */
 
-    public function formScene(EntityManagerInterface $manager, Scene $scene = null, Request $request)
+    public function formScene(EntityManagerInterface $manager, Scene $scene = null, Request $request, UserAdminService $admin)
     {
-        if(!$scene)
+        if($admin->isAdmin($this->getUser()))
         {
-            $this->addFlash('danger','Cette scène est inexistante.');
-            return $this->redirectToRoute('admin_scenes');
-        }
-        else
-        {
-            $form = $this->createForm(AdminScenesType::class, $scene);
-            $form->handleRequest($request);
-
-            if($form->isSubmitted() && $form->isValid()){
-                $manager->persist($scene);
-                $manager->flush();
-                $this->addFlash('success',"Scène corrigée avec succès");
+            if(!$scene)
+            {
+                $this->addFlash('danger','Cette scène est inexistante.');
                 return $this->redirectToRoute('admin_scenes');
             }
-
-            return $this->render("admin/form_scene.html.twig", [
-                'formScene' => $form->createView()
-            ]);
+            else
+            {
+                $form = $this->createForm(AdminScenesType::class, $scene);
+                $form->handleRequest($request);
+    
+                if($form->isSubmitted() && $form->isValid()){
+                    $manager->persist($scene);
+                    $manager->flush();
+                    $this->addFlash('success',"Scène corrigée avec succès");
+                    return $this->redirectToRoute('admin_scenes');
+                }
+    
+                return $this->render("admin/form_scene.html.twig", [
+                    'formScene' => $form->createView()
+                ]);
+            }
         }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+       
     }
 
     /**
      * @Route("admin/choices", name="admin_choices")
      */
 
-    public function adminChoices(ChoiceRepository $choiceRepo, EntityManagerInterface $manager, Request $request){
+    public function adminChoices(ChoiceRepository $choiceRepo, EntityManagerInterface $manager, Request $request, UserAdminService $admin){
 
-        $form = $this->createForm(RechercheType::class);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
+        if($admin->isAdmin($this->getUser()))
         {
-            $saisie = $form->get('recherche')->getData();
-            $choices = $choiceRepo->getChoiceByLabel($saisie);
-
-            if(!$choices)
+            $form = $this->createForm(RechercheType::class);
+            $form->handleRequest($request);
+    
+            if($form->isSubmitted() && $form->isValid())
             {
-                $this->addFlash('danger',"Aucun choix dispnible avec ce label.");
-                return $this->redirectToRoute("admin_choices");
+                $saisie = $form->get('recherche')->getData();
+                $choices = $choiceRepo->getChoiceByLabel($saisie);
+    
+                if(!$choices)
+                {
+                    $this->addFlash('danger',"Aucun choix dispnible avec ce label.");
+                    return $this->redirectToRoute("admin_choices");
+                }
             }
+            else
+            {
+                $choices = $choiceRepo->findAll();
+            }
+    
+            $colonnes = $manager->getClassMetadata(Choice::class)->getFieldNames();
+    
+            return $this->render("admin/admin-choices.html.twig", [
+                'colonnes' => $colonnes,
+                'choices' => $choices,
+                'rechercheForm' => $form->createView()
+            ]);
         }
-        else
+        else 
         {
-            $choices = $choiceRepo->findAll();
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
         }
 
-        $colonnes = $manager->getClassMetadata(Choice::class)->getFieldNames();
-
-        return $this->render("admin/admin-choices.html.twig", [
-            'colonnes' => $colonnes,
-            'choices' => $choices,
-            'rechercheForm' => $form->createView()
-        ]);
+       
     }
 
     /**
      * @Route("admin/choice/edit/{id}", name="admin_choice_edit")
      */
 
-    public function formChoice(EntityManagerInterface $manager, Choice $choice = null, Request $request)
+    public function formChoice(EntityManagerInterface $manager, Choice $choice = null, Request $request, UserAdminService $admin)
     {
-        if(!$choice)
+        if($admin->isAdmin($this->getUser()))
         {
-            $this->addFlash('danger','Ce choix est inexistant.');
-            return $this->redirectToRoute('admin_choices');
-        }
-        else
-        {
-            $form = $this->createForm(AdminChoicesType::class, $choice);
-            $form->handleRequest($request);
-
-            if($form->isSubmitted() && $form->isValid()){
-                $manager->persist($choice);
-                $manager->flush();
-                $this->addFlash('success',"Choix corrigé avec succès");
+            if(!$choice)
+            {
+                $this->addFlash('danger','Ce choix est inexistant.');
                 return $this->redirectToRoute('admin_choices');
             }
-
-            return $this->render("admin/form_choice.html.twig", [
-                'formChoice' => $form->createView()
-            ]);
+            else
+            {
+                $form = $this->createForm(AdminChoicesType::class, $choice);
+                $form->handleRequest($request);
+    
+                if($form->isSubmitted() && $form->isValid()){
+                    $manager->persist($choice);
+                    $manager->flush();
+                    $this->addFlash('success',"Choix corrigé avec succès");
+                    return $this->redirectToRoute('admin_choices');
+                }
+    
+                return $this->render("admin/form_choice.html.twig", [
+                    'formChoice' => $form->createView()
+                ]);
+            }
         }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+
+        
     }
 
     /**
      * @Route("admin/items", name="admin_items")
      */
 
-    public function adminItem(ItemRepository $itemRepo, EntityManagerInterface $manager )
+    public function adminItem(ItemRepository $itemRepo, EntityManagerInterface $manager, UserAdminService $admin )
     {
-        $colonnes = $manager->getClassMetadata(Item::class)->getFieldNames();
-        $items = $itemRepo->findAll();
-
-        return $this->render("admin/admin-items.html.twig", [
-            'colonnes' => $colonnes,
-            'items' => $items
-        ]);
+        if($admin->isAdmin($this->getUser()))
+        {
+            $colonnes = $manager->getClassMetadata(Item::class)->getFieldNames();
+            $items = $itemRepo->findAll();
+    
+            return $this->render("admin/admin-items.html.twig", [
+                'colonnes' => $colonnes,
+                'items' => $items
+            ]);
+        }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+        
     }
 
     /**
      * @Route("admin/item/edit/{id}", name="admin_item_edit")
      */
 
-    public function formItem(Item $item = null, EntityManagerInterface $manager, Request $request)
+    public function formItem(Item $item = null, EntityManagerInterface $manager, Request $request, UserAdminService $admin)
     {
-        if(!$item)
+        if($admin->isAdmin($this->getUser()))
         {
-            $this->addFlash('danger','Cet objet est inexistant.');
-            return $this->redirectToRoute('admin_items');
-        }
-        else
-        {
-            $form = $this->createForm(AdminItemsType::class, $item);
-            $form->handleRequest($request);
-
-            if($form->isSubmitted() && $form->isValid()){
-                $manager->persist($item);
-                $manager->flush();
-                $this->addFlash('success',"Objet corrigé avec succès");
+            if(!$item)
+            {
+                $this->addFlash('danger','Cet objet est inexistant.');
                 return $this->redirectToRoute('admin_items');
             }
-
-            return $this->render("admin/form_item.html.twig", [
-                'formItem' => $form->createView()
-            ]);
+            else
+            {
+                $form = $this->createForm(AdminItemsType::class, $item);
+                $form->handleRequest($request);
+    
+                if($form->isSubmitted() && $form->isValid()){
+                    $manager->persist($item);
+                    $manager->flush();
+                    $this->addFlash('success',"Objet corrigé avec succès");
+                    return $this->redirectToRoute('admin_items');
+                }
+    
+                return $this->render("admin/form_item.html.twig", [
+                    'formItem' => $form->createView()
+                ]);
+            }
         }
+        else 
+        {
+            $this->addFlash('danger','Accès réservé aux administrateurs');
+            return $this->redirectToRoute('app_story');
+        }
+        
     }
 }

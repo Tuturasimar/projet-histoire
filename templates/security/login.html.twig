@@ -8,11 +8,13 @@
     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
-    <div class="mb-3">
-        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-    </div>
-    {% endif %}
+    {% for classes,messages in app.flashes %}
+        <div class="text-center alert alert-{{ classes }}">
+            {% for message in messages %}
+            {{ message }} <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
 
     <h1 class="text-center my-3">Se connecter</h1>
     <div class="formBox">

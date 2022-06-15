@@ -33,9 +33,11 @@
             <div class="emptyBox"></div>
             {% else %}
             <div class="navBoxLog">
-                {% if is_granted('ROLE_ADMIN') %}
+            {% for role in app.user.roles %}
+                {% if role == '[ROLE_ADMIN]' %}
                 <a class="blueGradient headerLink" href="{{path('app_admin')}}">Back Office</a>
                 {% endif %}
+            {% endfor %}
                 <a href="{{path('app_logout')}}" class="redGradient headerLink">Se déconnecter</a>
             </div>
             <a href="{{path('app_story')}}" class="noHoverShadow headerLink">
