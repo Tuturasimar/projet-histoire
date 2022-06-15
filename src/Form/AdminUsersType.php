@@ -17,7 +17,6 @@ class AdminUsersType extends AbstractType
             ->add('pseudo')
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN'
                 ],
                 'expanded' => true,

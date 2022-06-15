@@ -104,24 +104,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+
         // guarantee every user at least has ROLE_USER
         $tab = [];
         if(!$roles)
         {
             $tab[] = '[ROLE_USER]';
         }
+        elseif (is_array($roles) && $roles[0] == "ROLE_ADMIN"){
+            $tab[] = '[ROLE_ADMIN]';
+            $tab[] = '[ROLE_USER]';
+        }
         else
         {
-            $tab = str_replace(']',"],[ROLE_USER]",$roles);
-            $tab = explode(',',$tab);
+                $tab = $roles.','.'[ROLE_USER]';
+                $tab = explode(',',$tab);
         }
-        
-        return array_unique($tab);
+        return $tab;
     }
 
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
 
         return $this;
     }
