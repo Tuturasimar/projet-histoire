@@ -27,6 +27,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StoryController extends AbstractController
 {
+
+    /**
+     * @Route("/", name="app_home_page")
+     */
+
+    public function homePage()
+    {
+        return $this->render('story/homepage.html.twig');
+    }
+
+
     /**
      * @Route("/story", name="app_story")
      */
