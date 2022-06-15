@@ -34,6 +34,7 @@ class StoryController extends AbstractController
 
     public function homePage()
     {
+
         return $this->render('story/homepage.html.twig');
     }
 
@@ -43,6 +44,8 @@ class StoryController extends AbstractController
      */
     public function index(CharacterRepository $charaRepo, ChapterRepository $chapterRepo): Response
     {
+
+
         $characters = $charaRepo->getAllCharactersByUser($this->getUser());
         $creation = true;
         if(count($characters) >= 6){
