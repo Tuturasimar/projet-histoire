@@ -473,12 +473,6 @@ button,
   margin: 10px 0;
 }
 
-.buttonBox {
-  margin: 10px 0;
-  display: flex;
-  justify-content: space-around;
-}
-
 .popUpBox {
   display: none;
   position: fixed;
@@ -501,6 +495,12 @@ button,
   padding: 50px 75px;
   border-radius: 20px;
   border: 1px solid;
+}
+
+.buttonBox {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-around;
 }
 
 /* SCROLLBAR */
