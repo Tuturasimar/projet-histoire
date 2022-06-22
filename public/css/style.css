@@ -473,7 +473,7 @@ button,
   margin: 10px 0;
 }
 
-.popUpBox {
+.modalBox {
   display: none;
   position: fixed;
   top: 0;
@@ -485,7 +485,7 @@ button,
   height: 100vh;
 }
 
-.pop {
+.modale {
   display: none;
   z-index: 30;
   position: fixed;
