@@ -22,6 +22,7 @@ use App\Service\Character\ChoicesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,7 +42,7 @@ class StoryController extends AbstractController
     /**
      * @Route("/story", name="app_story")
      */
-    public function index(CharacterRepository $charaRepo, ChapterRepository $chapterRepo): Response
+    public function index(CharacterRepository $charaRepo, ChapterRepository $chapterRepo, RequestStack $rs): Response
     {
         if($this->getUser())
         {
@@ -69,7 +70,6 @@ class StoryController extends AbstractController
         }
         else
         {
-            $this->addFlash('danger','Connexion requise');
             return $this->redirectToRoute('app_login');
         }
     }

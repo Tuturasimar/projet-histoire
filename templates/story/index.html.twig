@@ -9,10 +9,12 @@
         <div class="boxText">
             <p>Cette page de profil recense tous les personnages que vous avez créés.</p>
             <p>Le code couleur indique le cheminement global de votre personnage.</p>
-            <p>Une <span class="redText souligne">couleur rouge</span> indique que vous avez préféré des choix néfastes pour les
+            <p>Une <span class="redText souligne">couleur rouge</span> indique que vous avez préféré des choix néfastes
+                pour les
                 autres
                 protagonistes, égoïstes ou bien purement cruels.</p>
-            <p>Une <span class="blueText souligne">couleur bleue</span> indique que vous avez préféré des choix qui affectent
+            <p>Une <span class="blueText souligne">couleur bleue</span> indique que vous avez préféré des choix qui
+                affectent
                 positivement les
                 autres protagonistes même parfois en sacrifiant un bénéfice personnel.</p>
             <p>Un <span class="mixColorText">mélange de couleurs</span> indique que votre personnage est empli de
@@ -30,6 +32,9 @@
         {% endfor %}
         <h2>Limite de personnages : {{ data.characters|length }} / 6 </h2>
         {% for character in data.characters %}
+        <div class="textBox mt-4">
+            <h3> {{ character.archetype.name }}</h3>
+        </div>
         <div class="flexBar">
             <a href="{{path('app_chapters', {id: character.id })}}" class="linkChapter">
                 <div class="chapterBar shadows {% if character.alignment < -50 %}
@@ -48,9 +53,10 @@
                     </div>
                 </div>
             </a>
-            <a href="{{path('app_delete_character', {id: character.id})}}" class="redText"><i class="fa fa-eraser"></i>
+            <i class="fa fa-eraser" id="delete-{{character.id}}"></i>
             </a>
         </div>
+        <hr>
 
         {% endfor %}
         {% if creation %}
@@ -60,6 +66,12 @@
             </div>
         </a>
         {% endif %}
+        <div class="modalBox"></div>
+            <div class="modale">
+                <p>Confirmation de la suppression du personnage</p>
+                <a href="" class="redGradient deleteLink button">Suppression</a>
+                <span class="blueText modalText">Annuler</span>
+            </div>
     </div>
 </div>
 {% endblock %}

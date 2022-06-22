@@ -1,11 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 <div class="bigBox">
     <div class="columnBox">
-        
+        <h1>Bienvenue</h1>
+        <div class="textBox">
+            <p>Tutu'Story est un site qui contient des histoires interactives, dans le style des anciens livres "où vous
+                êtes le héros". </p>
+            <p>Il vous sera possible de suivre l'histoire de trois protagonistes aux origines et histoires différentes.
+            </p>
+            <ul>
+                <li>Agatha Burnwood, une femme résidant dans un village dans les contrées sauvages de l'empire d'Arutl.
+                </li>
+                <li>Valdwyn d'Aprecourt, un bâtard affilié à la noblesse de Port-Vaillant.</li>
+                <li>Alastor, un chat errant dans les alentours du temple d'Enkilosh.</li>
+            </ul>
+            <p>Il vous sera possible d'avoir un archétype de personnage, qui vous donnera accès à des choix et des
+                scènes exclusives.</p>
+            <p>Plus vous avancerez dans l'histoire, plus votre personnage sera marqué par les évènements. Quelle sera la
+                voie que vous lui choisirez ?</p>
+            <ul>
+                <li class="redText">Egoïste, brutale et sanguinaire ?</li>
+                <li class="blueText">Conciliante, vertueuse et juste ?</li>
+                <li class="mixColorText">Ou bien, un peu des deux ?</li>
+            </ul>
+            <p>Il ne reste plus qu'à vous de le découvrir.</p>
+            <div class="buttonBox"><a href="{{path('app_story')}}" class="button mixGradient shadows">Poursuivre</a></div>
+        </div>
     </div>
     <div class="contentBox">
         {% for classes,messages in app.flashes %}
@@ -15,7 +38,14 @@
             {% endfor %}
         </div>
         {% endfor %}
-        <h1>Test</h1>
+        <div class="textBox">
+            <h2 class="text-center qwigleyTitle">Feldryn</h2>
+            <img src="{{ asset('images/feldryn_color.png') }}" alt="" class="img-fluid mb-4">
+            <p>Ce site est encore en construction et a été réalisé dans le cadre d'un projet personnel pour l'obtention
+                d'un diplôme.</p>
+            <p>Certaines histoires ne sont pas encore finies et/ou complètes.</p>
+            <p>Certaines scènes ou choix peuvent heurter la sensibilité de personnes non averties.</p>
+        </div>
     </div>
 </div>
 {% endblock %}

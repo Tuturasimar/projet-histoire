@@ -95,6 +95,15 @@ a:hover {
   color: #003049;
 }
 
+.modalText {
+  margin-left: 10px;
+}
+
+.modalText:hover {
+  cursor: pointer;
+  color: black;
+}
+
 .qwigleyTitle {
   font-family: "Qwigley";
   font-size: 50px !important;
@@ -107,6 +116,14 @@ a:hover {
 
 .italic {
   font-style: italic;
+}
+
+.fa {
+  font-size: 20px;
+}
+.fa:hover {
+  color: #780000;
+  cursor: pointer;
 }
 
 /* Header & Footer*/
@@ -160,7 +177,8 @@ footer img {
 .headerLink:hover,
 button:hover,
 .buttonBox a:hover,
-.adminBox:hover {
+.adminBox:hover,
+.modale a:hover {
   color: #fff8eb;
   box-shadow: 0px 0px 4px 4px #00000040;
 }
@@ -255,7 +273,7 @@ input {
 .loginForm {
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 50px;
+  padding: 50px 0;
 }
 
 .form-control:focus {
@@ -356,7 +374,8 @@ button,
 }
 
 .contentBox a,
-.adminContentBox a {
+.adminContentBox a,
+.columnBox a {
   text-decoration: none;
 }
 
@@ -460,6 +479,30 @@ button,
   justify-content: space-around;
 }
 
+.modalBox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 29;
+  background-color: #fff8eb;
+  opacity: 0.5;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modale {
+  display: none;
+  z-index: 30;
+  position: fixed;
+  top: 40vh;
+  left: 50vw;
+  background-color: #fdf0d5;
+  padding: 50px 75px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
 /* SCROLLBAR */
 
 .columnBox::-webkit-scrollbar {
@@ -496,6 +539,10 @@ button,
     flex-direction: column;
     align-items: center;
     margin: 10px 0;
+  }
+
+  .modale {
+    left: 25vw;
   }
 }
 
@@ -545,5 +592,10 @@ button,
 
   .titleBox h2 {
     font-size: 24px !important;
+  }
+
+  .modale {
+    left: 0;
+    width: 100%;
   }
 }
