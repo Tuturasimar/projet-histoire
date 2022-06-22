@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Page chargée");
   document.addEventListener("click", (e) => {
-    let modalBox = document.querySelector(".modalBox");
-    let modale = document.querySelector(".modale");
+    let modalBox = document.querySelector(".popUpBox");
+    let modale = document.querySelector(".pop");
     if (e.target.id.indexOf("delete") !== -1) {
       modalBox.style.display = "block";
       modale.style.display = "block";
@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
       link.href = `/story/delete/${idSuppr}`;
     }
     if (
-      e.target.className == "modalBox" ||
-      e.target.className == "modale" ||
+      e.target.className == "popUpBox" ||
+      e.target.className == "pop" ||
       e.target.className == "blueText modalText"
     ) {
       modalBox.style.display = "none";
