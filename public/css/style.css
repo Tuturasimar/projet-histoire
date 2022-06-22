@@ -588,6 +588,7 @@ button,
 
   .buttonBox a {
     margin: 10px 0;
+    text-decoration: none;
   }
 
   .titleBox h2 {

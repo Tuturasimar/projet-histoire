@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("Page chargée");
   document.addEventListener("click", (e) => {
     let modalBox = document.querySelector(".modalBox");
     let modale = document.querySelector(".modale");
