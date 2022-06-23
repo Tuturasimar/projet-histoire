@@ -8,7 +8,32 @@
     <div class="columnBox">
         <h1>Histoire</h1>
         <div class="boxText">
-            <p>Plusieurs paragraphes qui vont résumer chaque chapitre ou alors les choix réalisés ?</p>
+            {% for story in storyContent %}
+            {% if '-CH-' in story[0].label %}
+            {% set effectsChoices = story[0].effect|split(';;') %}
+            {% for itemsChoices in effectsChoices %}
+            {% set effectChoice = itemsChoices|split('::') %}
+            {% if (effectChoice[0] == "") or (effectChoice[0] == 'alignment') %}
+            <p class="
+    {% if effectChoice[0] == 'alignment' %}
+        {% if effectChoice[1] < 0 %}
+       redText
+        {% elseif effectChoice[1] > 0 %}
+       blueText
+        {% else %}
+        mixColorText
+        {% endif %}
+    {% else %}
+    mixColorText
+    {% endif %}">
+                {{story[0].content}}</p>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <hr>
+            <h3 class="text-center qwigley">{{story[0].title}}</h3>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div class="contentBox">
@@ -39,8 +64,8 @@
     {% else %}
     mixGradient
     {% endif %}">
-            {{ item[0].content }} 
-            </button>
+            {{ item[0].content }}
+        </button>
         {% endif %}
         {% endfor %}
         {% else %}

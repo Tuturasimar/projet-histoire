@@ -207,9 +207,11 @@ class StoryController extends AbstractController
                     $isClosed = true;
                     $content = [];
                     $index = 0;
+                    $storyContent = [];
                     foreach($stories as $iteration => $story){
                         $index= $iteration + 1;
                         $story = explode(';;',$story);
+                        array_push($storyContent,$chapterRepo->findChapterByLabel($story[0]));
                         foreach($story as $key => $values){
                         if($story[0] == $chapter->getLabel()){
                             if($iteration == count($stories) - 1){
@@ -223,19 +225,22 @@ class StoryController extends AbstractController
                             } else if(strpos($values,'-CH-')){
                                 array_push($content,$choiceRepo->findBy(array('label' => $values)));
                                 }
-                            }
+                            } 
+                        if(strpos($values,'-CH-')){
+                            array_push($storyContent,$choiceRepo->findBy(array('label' => $values)));
+                        }
                         }
                     }
                     if($content) {
                         $lastChoices = $choiceRepo->findBy(array('scene' => end($content)[0]), array('label' => 'ASC'));
                         $lastContent = $choicesService->checkConstraints($lastChoices,$character);
-                        
                     return $this->render("story/read-chapters.html.twig", array(
                         'content' => $content,
                         'choices' => $lastContent,
                         'character' => $character,
                         'isClosed' => $isClosed,
-                        'nextChapter' => $nextChapter
+                        'nextChapter' => $nextChapter,
+                        'storyContent' => $storyContent
                     ));
                     }
                 }

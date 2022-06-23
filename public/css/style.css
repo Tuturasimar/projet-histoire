@@ -49,7 +49,7 @@ body {
 }
 
 .mixColorText {
-  background: linear-gradient(267.38deg, #669bbc 0%, #c1121f 100%);
+  background: linear-gradient(267.38deg, #669bbc 50%, #c1121f 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: none;
@@ -104,13 +104,17 @@ a:hover {
   color: black;
 }
 
-.qwigleyTitle {
+.qwigley,
+.qwigleyTitle,
+.qwigleyP {
   font-family: "Qwigley";
+}
+
+.qwigleyTitle {
   font-size: 50px !important;
 }
 
 .qwigleyP {
-  font-family: "Qwigley";
   font-size: 26px;
 }
 
