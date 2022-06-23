@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+
+<div class="boxText text-center">
+    <h1 class="mb-4">Oups ! Cette page n'existe pas.</h1>
+    <p>Assurez vous qu'il n'y ait pas d'erreurs dans l'URL</p>
+    <p>Retournez en arrière ou bien utilisez le bouton ci-dessous pour retourner à l'accueil.</p>
+</div>
+<div class="buttonBox"><a href="{{path('app_story')}}" class="mixGradient button shadows">Retour à l'accueil</a></div>
+
+
+{% endblock %}
