@@ -7,7 +7,7 @@
 <div class="bigBox">
     <div class="columnBox">
         <h1>Histoire</h1>
-        <div class="boxText">
+        <div class="choiceContent">
             {% for story in storyContent %}
             {% if '-CH-' in story[0].label %}
             {% set effectsChoices = story[0].effect|split(';;') %}

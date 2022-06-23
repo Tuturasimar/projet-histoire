@@ -357,14 +357,18 @@ button,
   margin-bottom: 20px;
 }
 
-.boxText {
+.boxText,
+.choiceContent {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 70%;
   text-align: justify;
   padding: 30px;
   margin-top: 50px;
+}
+
+.boxText {
+  min-height: 70%;
 }
 
 .contentBox,
