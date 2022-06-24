@@ -36,7 +36,8 @@
             {% endfor %}
         </div>
 
-        {{ form_widget(formCharacter.archetype, {
+        {{ form_row(formCharacter.archetype, {
+            label: "Choisissez un archétype",
             attr: {
                 class: "my-2"
             }
@@ -54,7 +55,8 @@
             {% endfor %}
         </div>
 
-        {{ form_widget(formCharacter.pj, {
+        {{ form_row(formCharacter.pj, {
+            label: "Choisissez le personnage principal",
             attr: {
                 class: "my-2"
             }

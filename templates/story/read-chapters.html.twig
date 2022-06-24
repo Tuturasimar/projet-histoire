@@ -69,7 +69,8 @@
         {% endif %}
         {% endfor %}
         {% else %}
-        <div class="textBox">
+        
+        <div class="textBox" {% if loop.last %}id="ancre"{% endif %}>
             {% set texts = item[0].content|split('::') %}
             {% for text in texts %}
             {% if text|first == '"'  %}
@@ -87,7 +88,7 @@
         {% endfor %}
         <div class="buttonBox">
             {% if isClosed %}
-            <a href="{{path('app_read_chapters', { id: character.id, chapter: nextChapter.id })}}"
+            <a href="{{path('app_read_chapters', { id: character.id, chapter: nextChapter.id, _fragment: 'ancre' })}}"
                 class="button shadows mixGradient">Chapitre suivant</a>
             {% else %}
             {% if choices is empty %}

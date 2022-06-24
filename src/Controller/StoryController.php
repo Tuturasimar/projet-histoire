@@ -310,7 +310,7 @@ class StoryController extends AbstractController
                             $character->setStoryDone($storyDone);
                             $manager->persist($character);
                             $manager->flush();
-                            return $this->redirectToRoute('app_read_chapters', array('id' => $character->getId(), 'chapter' => $chapter[0]->getId()));
+                            return $this->redirectToRoute('app_read_chapters', array('id' => $character->getId(), 'chapter' => $chapter[0]->getId(),  '_fragment' => 'ancre'));
                             }
                         }
                     }  
