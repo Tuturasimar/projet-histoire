@@ -14,7 +14,7 @@
             {% for itemsChoices in effectsChoices %}
             {% set effectChoice = itemsChoices|split('::') %}
             {% if (effectChoice[0] == "") or (effectChoice[0] == 'alignment') %}
-            <p class="
+            <p> <span class="
     {% if effectChoice[0] == 'alignment' %}
         {% if effectChoice[1] < 0 %}
        redText
@@ -26,7 +26,7 @@
     {% else %}
     mixColorText
     {% endif %}">
-                {{story[0].content}}</p>
+                {{story[0].content}}</span></p>
             {% endif %}
             {% endfor %}
             {% else %}
@@ -69,8 +69,7 @@
         {% endif %}
         {% endfor %}
         {% else %}
-        
-        <div class="textBox" {% if loop.last %}id="ancre"{% endif %}>
+        <div class="textBox" {% if loop.last %} id= "ancre" {% endif %}>
             {% set texts = item[0].content|split('::') %}
             {% for text in texts %}
             {% if text|first == '"'  %}
