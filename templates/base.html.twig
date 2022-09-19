@@ -24,6 +24,15 @@
     {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4V10CNDY4C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4V10CNDY4C');
+</script>
 
 <body>
     <header class="shadows">
@@ -37,11 +46,11 @@
             <div class="emptyBox"></div>
             {% else %}
             <div class="navBoxLog">
-            {% for role in app.user.roles %}
+                {% for role in app.user.roles %}
                 {% if role == '[ROLE_ADMIN]' %}
                 <a class="blueGradient headerLink" href="{{path('app_admin')}}">Back Office</a>
                 {% endif %}
-            {% endfor %}
+                {% endfor %}
                 <a href="{{path('app_logout')}}" class="redGradient headerLink">Se déconnecter</a>
             </div>
             <a href="{{path('app_story')}}" class="noHoverShadow headerLink">
@@ -63,8 +72,9 @@
     <footer>
         <img src="{{asset('images/logo.png')}}" alt="Logo">
         <div class="footerText">
-            <p>© Copyright 2022 Sénant Trévor </p>
-            <p>Copyrights | Informations légales</p>
+            <p>© Copyright 2022 Sénant Trévor - 
+                <a href="{{path('app_copyrights')}}">Copyrights</a> | <a href="{{path('app_infos')}}">Informations légales</a>
+            </p>
         </div>
     </footer>
 

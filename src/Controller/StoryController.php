@@ -366,4 +366,24 @@ class StoryController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     }
+
+    /**
+     * @Route("/copyrights", name="app_copyrights")
+     */
+
+    public function showCopyrights()
+    {
+        return $this->render("story/copyright.html.twig");
+    }
+
+    /**
+     * @Route("/infos", name="app_infos")
+     */
+
+    public function showLegalInfos()
+    {
+        return $this->render("story/informations_légales.html.twig");
+    }
+
+
 }
