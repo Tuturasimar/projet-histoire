@@ -69,7 +69,7 @@
         {% endif %}
         {% endfor %}
         {% else %}
-        <div class="textBox" {% if loop.last %} id= "ancre" {% endif %}>
+        <div class="textBox" {% if loop.last %} id="ancre" {% endif %}>
             {% set texts = item[0].content|split('::') %}
             {% for text in texts %}
             {% if text|first == '"'  %}

@@ -114,7 +114,8 @@ class StoryController extends AbstractController
      * @Route("/story/new", name="app_new_character")
      */
 
-    public function newCharacter(Request $request, EntityManagerInterface $manager, ArchetypeRepository $aRepo, PjRepository $pjRepo, CharacterService $characService, CharacterRepository $charaRepo)
+    public function newCharacter(Request $request, EntityManagerInterface $manager, ArchetypeRepository $aRepo, 
+                                PjRepository $pjRepo, CharacterService $characService, CharacterRepository $charaRepo)
     {
         if($this->getUser())
         {
@@ -195,7 +196,8 @@ class StoryController extends AbstractController
      * @Route("/story/read/{id}/{chapter}", name="app_read_chapters")
      */
 
-    public function readChapters(Character $character = null, Chapter $chapter = null , SceneRepository $sceneRepo,ChoiceRepository $choiceRepo, CharacterRepository $characRepo, ChapterRepository $chapterRepo, ChoicesService $choicesService)
+    public function readChapters(Character $character = null, Chapter $chapter = null , SceneRepository $sceneRepo,ChoiceRepository $choiceRepo, 
+                                CharacterRepository $characRepo, ChapterRepository $chapterRepo, ChoicesService $choicesService)
     {
         if($this->getUser())
         {
@@ -260,7 +262,8 @@ class StoryController extends AbstractController
      * @Route("/story/validate/choice/{id}/{character}", name="app_choices")
      */
 
-    public function validateChoice(Choice $choice = null, Character $character = null , EntityManagerInterface $manager, CharacterRepository $characRepo, ChoiceRepository $choiceRepo, SceneRepository $sceneRepo, ChapterRepository $chapterRepo, ChoicesService $choiceService, ItemRepository $itemRepo, InventorySlotRepository $inventorySlotRepo){
+    public function validateChoice(Choice $choice = null, Character $character = null , EntityManagerInterface $manager, CharacterRepository $characRepo, ChoiceRepository $choiceRepo, 
+    SceneRepository $sceneRepo, ChapterRepository $chapterRepo, ChoicesService $choiceService, ItemRepository $itemRepo, InventorySlotRepository $inventorySlotRepo){
         if($this->getUser())
         {
             $characters = $characRepo->findBy(array('user' => $this->getUser()));
@@ -277,7 +280,6 @@ class StoryController extends AbstractController
                             if($validateChoice){
                             $actualChoice = $choice->getLabel();
                             $nextStory = $choice->getNextStory();
-                            // $choiceService->checkEffect($choice, $character);
                             $effects= $choice->getEffect();
                             if($effects){
                                 $effect = explode(';;',$effects);
@@ -331,7 +333,8 @@ class StoryController extends AbstractController
      * @Route("/story/validate/chapter/{character}", name="app_endChapter")
      */
 
-    public function validateChapter(Character $character = null , ChapterRepository $chapterRepo, EntityManagerInterface $manager, SceneRepository $sceneRepo, CharacterRepository $characRepo){
+    public function validateChapter(Character $character = null , ChapterRepository $chapterRepo, EntityManagerInterface $manager, 
+    SceneRepository $sceneRepo, CharacterRepository $characRepo){
 
         if($this->getUser())
         {
