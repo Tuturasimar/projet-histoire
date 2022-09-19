@@ -2,4 +2,4 @@ User-agent : *
 Disallow: /admin/
 Allow: /
 
-Sitemap: http://www.projet-histoire.herokuapp.com/sitemap.xml
+Sitemap: http://projet-histoire.herokuapp.com/sitemap.xml
